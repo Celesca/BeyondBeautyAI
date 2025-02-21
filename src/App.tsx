@@ -1,12 +1,13 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import CameraVerticalPage from './CameraPage';
 
 function App() {
-
   return (
-    <>
-      <h1 className="text-red-500 mt-10">React App</h1>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<CameraVerticalPage />} />
+      <Route path="/camera" element={<CameraVerticalPage />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
