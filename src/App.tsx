@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-      Hello World
+      <h1 className="text-red-500 mt-10">React App</h1>
     </>
   )
 }
