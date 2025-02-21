@@ -1,13 +1,16 @@
-import { Routes, Route } from 'react-router-dom';
+import './App.css'
+import { FC } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage';
 import CameraVerticalPage from './CameraPage';
 
-function App() {
+export const App: FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<CameraVerticalPage />} />
-      <Route path="/camera" element={<CameraVerticalPage />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/camera" element={<CameraVerticalPage />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
-
-export default App;
+};

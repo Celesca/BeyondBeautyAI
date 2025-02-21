@@ -1,18 +1,12 @@
-"use client";
-
 import React, { useRef, useEffect, useState } from "react";
-// import { useRouter } from "next/navigation"; // useRouter to handle navigation
 import Swal from "sweetalert2";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
 import { FaCamera } from "react-icons/fa6";
-import { useNavigate } from "react-router";
 
-const CamerVerticalPage: React.FC = () => {
+const CameraVerticalPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const photoRef = useRef<HTMLCanvasElement>(null);
   const [hasPhoto, setHasPhoto] = useState(false);
-  const navigate = useNavigate();
-
   const [orientationAlert, setOrientationAlert] = useState(false);
 
   const getVideo = () => {
@@ -76,7 +70,7 @@ const CamerVerticalPage: React.FC = () => {
             timer: 2000,
             showConfirmButton: false,
           }).then(() => {
-            navigate('/camera');
+            window.location.href = '/';
           });
         }
       });
@@ -168,4 +162,4 @@ const CamerVerticalPage: React.FC = () => {
 
 
 
-export default CamerVerticalPage;
+export default CameraVerticalPage;
