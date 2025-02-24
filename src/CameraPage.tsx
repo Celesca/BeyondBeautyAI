@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FaCamera } from "react-icons/fa6";
+import Navbar from "./components/Navbar";
 
 
 const CamerVerticalPage: React.FC = () => {
@@ -99,6 +100,8 @@ const CamerVerticalPage: React.FC = () => {
   }, [hasPhoto]);
 
   return (
+    <div>
+    <Navbar showBack={true} />
     <div className="min-h-screen w-full py-4 px-2 flex flex-col items-center">
       <div className="w-full flex flex-col gap-2 relative">
         {!hasPhoto && (
@@ -130,6 +133,7 @@ const CamerVerticalPage: React.FC = () => {
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 };
