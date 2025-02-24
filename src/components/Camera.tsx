@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Camera, RefreshCw } from 'lucide-react';
 import Swal from 'sweetalert2';
 
@@ -6,7 +6,6 @@ const FaceScannerUI = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const photoRef = useRef<HTMLCanvasElement>(null);
   const [hasPhoto, setHasPhoto] = useState<boolean>(false);
-  const [orientationAlert, setOrientationAlert] = useState<boolean>(false);
 
   const time = new Date().toLocaleTimeString('en-US', {
     hour: '2-digit',
