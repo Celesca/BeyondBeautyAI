@@ -32,23 +32,32 @@ const CamerVerticalPage: React.FC = () => {
       });
   };
 
-
-  const takePhoto = () => {
-    if (!videoRef.current || !photoRef.current) return;
+ const takePhoto = () => {
+    console.log("Clicked");
+    if (!videoRef.current || !photoRef.current) {
+      console.log(videoRef.current)
+      console.log(photoRef.current)
+      console.error("Video or photo refs are not available");
+        return;
+    } else {
+      console.log("Video and photo refs are available");
+    }
 
     const video = videoRef.current;
     const photo = photoRef.current;
 
-    const videoRect = videoRef.current?.getBoundingClientRect();
+    // Get the actual dimensions of the video element
+    const videoRect = video.getBoundingClientRect();
+    const width = videoRect.width;
+    const height = videoRect.height;
 
-    const width = videoRect?.width || video.width;
-    const height = videoRect?.height || video.height;
-
+    // Set canvas dimensions to match video
     photo.width = width;
     photo.height = height;
 
     const ctx = photo.getContext("2d");
     if (ctx) {
+      // Draw the current video frame
       ctx.drawImage(video, 0, 0, width, height);
       setHasPhoto(true);
     }
@@ -58,6 +67,7 @@ const CamerVerticalPage: React.FC = () => {
       confirmGroup.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
 
   const confirmPhoto = () => {
     Swal.fire({
@@ -102,32 +112,33 @@ const CamerVerticalPage: React.FC = () => {
   }, [hasPhoto]);
 
     return (
-      <div className="h-screen flex flex-col overflow-hidden">
+      <div className="h-screen flex flex-col">
       <Navbar showBack={true} />
-      <div className="flex-1 flex flex-col items-center mt-4 px-2 overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="relative w-full max-w-2xl aspect-[3/4] md:aspect-video">
           {!hasPhoto ? (
-            <>
+            <div className="relative w-full h-full">
               <video
                 ref={videoRef}
                 playsInline
+                autoPlay
                 className="w-full h-full object-cover rounded-lg shadow-lg"
               />
               <button
                 className="absolute bottom-4 right-4 bg-blue-500 hover:bg-blue-700 
-                         text-white font-bold py-2 px-4 rounded-full shadow-lg 
-                         flex items-center gap-2 transition-colors"
+                          text-white font-bold py-3 px-6 rounded-full shadow-lg 
+                          flex items-center gap-2 transition-colors z-10"
                 onClick={takePhoto}
               >
-                <FaCamera /> Snap!
+                <FaCamera size={20} /> Snap!
               </button>
-            </>
+            </div>
 
 ) : (
   <canvas 
-    ref={photoRef}
-    className="w-full h-full object-cover rounded-lg shadow-lg"
-  />
+  ref={photoRef}
+  className="w-full h-full object-cover rounded-lg shadow-lg"
+/>
 )}
 </div>
 
