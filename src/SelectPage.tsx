@@ -94,33 +94,53 @@ const SelectPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const photoData = localStorage.getItem('capturedPhoto');
 
-//   const handleOptionSelect = (categoryId: string, optionId: string) => {
-//     setSelectedOptions(prev => ({
-//       ...prev,
-//       [categoryId]: optionId
-//     }));
+    // Real-used handle submit
+//   const handleSubmit = async () => {
+//     if (Object.keys(selectedOptions).length === 0 || !photoData) return;
+
+//     setIsLoading(true);
+//     try {
+//       const formData = new FormData();
+//       formData.append('image', dataURItoBlob(photoData));
+//       formData.append('options', JSON.stringify(selectedOptions));
+
+//       const response = await fetch('YOUR_BACKEND_API_URL', {
+//         method: 'POST',
+//         body: formData,
+//       });
+
+//       if (!response.ok) throw new Error('Failed to process image');
+
+//       const result = await response.json();
+//       localStorage.setItem('processedImage', result.imageUrl);
+//       window.location.href = '/result';
+      
+//     } catch (error) {
+//       console.error('Error processing image:', error);
+//       alert('Failed to process image. Please try again.');
+//     } finally {
+//       setIsLoading(false);
+//     }
 //   };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (Object.keys(selectedOptions).length === 0 || !photoData) return;
-
+  
     setIsLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('image', dataURItoBlob(photoData));
-      formData.append('options', JSON.stringify(selectedOptions));
-
-      const response = await fetch('YOUR_BACKEND_API_URL', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Failed to process image');
-
-      const result = await response.json();
-      localStorage.setItem('processedImage', result.imageUrl);
+      // Save selected options to localStorage
+      localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+  
+      // For demo purposes, we'll use static images
+      // In production, this would be your API call
+      const processedImagePath = `/images/results/${selectedOptions['overall']}.jpg`;
+      localStorage.setItem('processedImage', processedImagePath);
+  
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+  
+      // Navigate to result page
       window.location.href = '/result';
-      
     } catch (error) {
       console.error('Error processing image:', error);
       alert('Failed to process image. Please try again.');
@@ -128,8 +148,7 @@ const SelectPage: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  // ... existing dataURItoBlob function ...
+  
     // Helper function to convert Data URI to Blob
     const dataURItoBlob = (dataURI: string): Blob => {
         const byteString = atob(dataURI.split(',')[1]);
