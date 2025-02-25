@@ -5,6 +5,7 @@ import HomePage from './HomePage';
 import CamerVerticalPage from './CameraPage';
 import SelectPage from './SelectPage';
 import ResultPage from './ResultPage';
+import ClinicPage from './ClinicPage';
 
 export const App: FC = () => {
   return (
@@ -14,6 +15,7 @@ export const App: FC = () => {
         <Route path="/camera" element={<CamerVerticalPage />} />
         <Route path="/select" element={<SelectPage />} />
         <Route path="/result" element={<ResultPage />} />
+        <Route path="/clinic" element={<ClinicPage />} />
       </Routes>
     </BrowserRouter>
   );
