@@ -115,7 +115,7 @@ const CamerVerticalPage: React.FC = () => {
           <button
             className="absolute bottom-4 right-4 bg-blue-500 hover:bg-blue-700 
                       text-white font-bold py-3 px-6 rounded-full shadow-lg 
-                      flex items-center gap-2 transition-colors z-10"
+                      flex items-center gap-2 transition-colors z-10 hover:cursor-pointer"
             onClick={takePhoto}
           >
             <FaCamera size={20} /> Snap!
