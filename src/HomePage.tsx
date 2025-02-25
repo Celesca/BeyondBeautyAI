@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
             onClick={() => window.location.href = '/camera'}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold 
                      py-3 px-8 rounded-full shadow-lg transition-colors
-                     flex items-center gap-2 mx-auto"
+                     flex items-center gap-2 mx-auto hover:cursor-pointer"
           >
             <FaCamera />
             Try Now
@@ -55,7 +55,8 @@ const HomePage: React.FC = () => {
               key={service.id}
               onClick={() => window.location.href = '/camera'}
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md 
-                       transition-shadow text-left border border-gray-100"
+                       transition-shadow text-left border border-gray-100
+                       hover:cursor-pointer"
             >
               <div className="text-3xl mb-3">{service.icon}</div>
               <h2 className="text-xl font-semibold mb-2">{service.title}</h2>
