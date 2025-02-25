@@ -15,8 +15,8 @@ const ResultPage: React.FC = () => {
         </h1>
 
         <div className="grid md:grid-cols-2 gap-4 mb-6">
-          {/* Original Photo */}
-          <div className="space-y-2">
+          {/* Original Photo - Hidden on mobile, visible on md and up */}
+          <div className="hidden md:block space-y-2">
             <h2 className="font-semibold text-center">Original</h2>
             <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
               <img
@@ -27,12 +27,12 @@ const ResultPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Processed Photo */}
-          <div className="space-y-2">
+       {/* Processed Photo - Full width on mobile */}
+       <div className="space-y-2 md:col-span-1 col-span-2">
             <h2 className="font-semibold text-center">Transformed</h2>
-            <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
+            <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg max-w-sm mx-auto">
               <img
-                src={processedImage || '/images/results/processed.jpg'} // Fallback to static image
+                src={processedImage || '/images/results/processed.jpg'}
                 alt="Transformed"
                 className="w-full h-full object-cover"
               />
