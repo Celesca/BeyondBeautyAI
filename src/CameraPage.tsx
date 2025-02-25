@@ -69,22 +69,17 @@ const CamerVerticalPage: React.FC = () => {
   };
 
   const confirmPhoto = () => {
+    // Save photo data to localStorage
+    localStorage.setItem('capturedPhoto', photoData!);
+    
     Swal.fire({
-      title: 'Loading...',
-      text: 'Processing your photo.',
-      icon: 'info',
+      title: 'Photo Saved!',
+      text: 'Now let\'s choose your beauty style.',
+      icon: 'success',
       timer: 2000,
       showConfirmButton: false,
       willClose: () => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Photo confirmed successfully.',
-          icon: 'success',
-          timer: 2000,
-          showConfirmButton: false,
-        }).then(() => {
-          window.location.href = '/camera';
-        });
+        window.location.href = '/select';
       }
     });
   };
