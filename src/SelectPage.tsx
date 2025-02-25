@@ -17,7 +17,7 @@ interface Category {
 
 const beautyCategories: Category[] = [
   {
-    id: 'style',
+    id: 'overall',
     title: 'Overall Style',
     options: [
       { 
@@ -65,20 +65,41 @@ const beautyCategories: Category[] = [
       // Add more nose options...
     ]
   },
+  {
+    id: 'eyes',
+    title: 'Eye Makeup',
+    options: [
+      { 
+        id: 'eyes-1', 
+        title: 'Smokey Eyes', 
+        description: 'Bold and sultry look',
+        image: '/images/eyes/smokey.jpg' 
+      },
+      { 
+        id: 'eyes-2', 
+        title: 'Natural Eyes', 
+        description: 'Enhance your natural eye shape',
+        image: '/images/eyes/natural.jpg' 
+      },
+      // Add more eye options...
+    ]
+  }
+
   // Add more categories as needed
 ];
 
 const SelectPage: React.FC = () => {
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const photoData = localStorage.getItem('capturedPhoto');
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+    const [isLoading, setIsLoading] = useState(false);
+    const photoData = localStorage.getItem('capturedPhoto');
 
-  const handleOptionSelect = (categoryId: string, optionId: string) => {
-    setSelectedOptions(prev => ({
-      ...prev,
-      [categoryId]: optionId
-    }));
-  };
+//   const handleOptionSelect = (categoryId: string, optionId: string) => {
+//     setSelectedOptions(prev => ({
+//       ...prev,
+//       [categoryId]: optionId
+//     }));
+//   };
 
   const handleSubmit = async () => {
     if (Object.keys(selectedOptions).length === 0 || !photoData) return;
@@ -122,80 +143,119 @@ const SelectPage: React.FC = () => {
         
         return new Blob([ab], { type: mimeString });
       };
+
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <Navbar showBack={true} />
+          <div className="max-w-2xl mx-auto p-4">
+            <h1 className="text-2xl font-bold text-center mb-6">
+              Customize Your Look
+            </h1>
+            
+            {/* Preview of captured photo */}
+            {photoData && (
+              <div className="mb-6">
+                <img 
+                  src={photoData} 
+                  alt="Captured" 
+                  className="w-full max-h-64 object-cover rounded-lg shadow-md"
+                />
+              </div>
+            )}
     
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar showBack={true} />
-      <div className="max-w-2xl mx-auto p-4">
-        <h1 className="text-2xl font-bold text-center mb-6">
-          Customize Your Look
-        </h1>
-        
-        {/* Preview of captured photo */}
-        {photoData && (
-          <div className="mb-6">
-            <img 
-              src={photoData} 
-              alt="Captured" 
-              className="w-full max-h-64 object-cover rounded-lg shadow-md"
-            />
-          </div>
-        )}
-
-        {/* Categories and options */}
-        <div className="space-y-6">
-          {beautyCategories.map((category) => (
-            <div key={category.id} className="space-y-2">
-              <h2 className="text-xl font-semibold">{category.title}</h2>
-              <div className="relative">
-                <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbar">
-                  {category.options.map((option) => (
-                    <div 
-                      key={option.id}
-                      className="snap-start flex-none w-48"
-                    >
-                      <button
-                        onClick={() => handleOptionSelect(category.id, option.id)}
-                        className={`w-full rounded-lg border-2 transition-all overflow-hidden
-                          ${selectedOptions[category.id] === option.id
-                            ? 'border-blue-500 ring-2 ring-blue-300'
-                            : 'border-gray-200 hover:border-blue-300'
-                          }`}
-                      >
-                        <img 
-                          src={option.image}
-                          alt={option.title}
-                          className="w-full h-32 object-cover"
-                        />
-                        <div className="p-2">
-                          <h3 className="font-bold text-sm">{option.title}</h3>
-                          <p className="text-gray-600 text-xs">{option.description}</p>
+            {/* Category Selection */}
+            <div className="flex justify-center gap-4 mb-8">
+              {beautyCategories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`px-6 py-3 rounded-full font-semibold transition-all
+                    ${selectedCategory === category.id
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                    }`}
+                >
+                  {category.title}
+                </button>
+              ))}
+            </div>
+    
+            {/* Options Slider for Selected Category */}
+            {selectedCategory && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-center">
+                  {beautyCategories.find(c => c.id === selectedCategory)?.title} Options
+                </h2>
+                <div className="relative">
+                  <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbar">
+                    {beautyCategories
+                      .find(c => c.id === selectedCategory)
+                      ?.options.map((option) => (
+                        <div 
+                          key={option.id}
+                          className="snap-start flex-none w-48"
+                        >
+                          <button
+                            onClick={() => setSelectedOptions(prev => ({
+                              ...prev,
+                              [selectedCategory]: option.id
+                            }))}
+                            className={`w-full rounded-lg border-2 transition-all overflow-hidden
+                              ${selectedOptions[selectedCategory] === option.id
+                                ? 'border-blue-500 ring-2 ring-blue-300'
+                                : 'border-gray-200 hover:border-blue-300'
+                              }`}
+                          >
+                            <img 
+                              src={option.image}
+                              alt={option.title}
+                              className="w-full h-32 object-cover"
+                            />
+                            <div className="p-2">
+                              <h3 className="font-bold text-sm">{option.title}</h3>
+                              <p className="text-gray-600 text-xs">{option.description}</p>
+                            </div>
+                          </button>
                         </div>
-                      </button>
-                    </div>
-                  ))}
+                      ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )}
+    
+            {/* Selected Options Summary */}
+            {Object.keys(selectedOptions).length > 0 && (
+              <div className="mt-6 p-4 bg-white rounded-lg shadow-sm">
+                <h3 className="font-semibold mb-2">Selected Options:</h3>
+                <div className="space-y-1">
+                  {Object.entries(selectedOptions).map(([categoryId, optionId]) => {
+                    const category = beautyCategories.find(c => c.id === categoryId);
+                    const option = category?.options.find(o => o.id === optionId);
+                    return (
+                      <div key={categoryId} className="text-sm text-gray-600">
+                        {category?.title}: {option?.title}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+    
+            {/* Submit button */}
+            <button
+              onClick={handleSubmit}
+              disabled={Object.keys(selectedOptions).length === 0 || isLoading}
+              className={`w-full py-3 px-6 rounded-lg text-white font-bold mt-6
+                ${isLoading || Object.keys(selectedOptions).length === 0
+                  ? 'bg-gray-400' 
+                  : 'bg-blue-500 hover:bg-blue-600'
+                } transition-colors`}
+            >
+              {isLoading ? 'Processing...' : 'Apply Changes'}
+            </button>
+          </div>
         </div>
-
-        {/* Submit button */}
-        <button
-          onClick={handleSubmit}
-          disabled={Object.keys(selectedOptions).length === 0 || isLoading}
-          className={`w-full py-3 px-6 rounded-lg text-white font-bold mt-6
-            ${isLoading || Object.keys(selectedOptions).length === 0
-              ? 'bg-gray-400' 
-              : 'bg-blue-500 hover:bg-blue-600'
-            } transition-colors`}
-        >
-          {isLoading ? 'Processing...' : 'Apply Changes'}
-        </button>
-      </div>
-    </div>
-  );
-};
+      );
+    };
 
 export default SelectPage;
