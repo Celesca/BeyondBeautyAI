@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
             </li>
             <li className="flex items-center gap-2">
               <span className="text-blue-500">✓</span>
-              Multiple beauty styles to choose from
+              Reliable clinics and beauty services
             </li>
             <li className="flex items-center gap-2">
               <span className="text-blue-500">✓</span>
