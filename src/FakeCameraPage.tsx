@@ -32,6 +32,7 @@ const CamerVerticalPage: React.FC = () => {
   };
 
   const takePhoto = () => {
+    confirmPhoto();
     if (!videoRef.current) return;
   
     const video = videoRef.current;
@@ -105,10 +106,6 @@ const CamerVerticalPage: React.FC = () => {
       <Navbar showBack={true} />
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="relative w-full max-w-2xl aspect-[3/4] md:aspect-video">
-
-            <img src="./"
-            alt="camera" className="w-full h-full object-cover rounded-lg shadow-lg" />
-         
           {/* <video
             ref={videoRef}
             playsInline
@@ -116,14 +113,23 @@ const CamerVerticalPage: React.FC = () => {
             muted
             className="w-full h-full object-cover rounded-lg shadow-lg"
           /> */}
-          <button
+          <div className="flex flex-col justify-center items-center">
+            <img src="/src/images/samples/face.png" alt="camera" className="w-64 object-cover rounded-lg shadow-lg" />
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg
+                      flex items-center gap-2 transition-colors mt-3 z-10 hover:cursor-pointer"
+                      onClick={takePhoto}>
+            <FaCamera size={20} /> Snap!
+          </button>
+          
+          </div>
+
+          {/* <button
             className="absolute bottom-4 right-4 bg-blue-500 hover:bg-blue-700 
                       text-white font-bold py-3 px-6 rounded-full shadow-lg 
                       flex items-center gap-2 transition-colors z-10 hover:cursor-pointer"
             onClick={takePhoto}
-          >
-            <FaCamera size={20} /> Snap!
-          </button>
+          > */}
+
         </div>
 
         {/* Photo Preview Modal */}
