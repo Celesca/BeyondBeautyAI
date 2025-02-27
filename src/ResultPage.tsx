@@ -20,7 +20,8 @@ const ResultPage: React.FC = () => {
             <h2 className="font-semibold text-center">Original</h2>
             <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
               <img
-                src={originalPhoto || ''}
+                // src={originalPhoto || ''}
+                src="/src/images/samples/face.png"
                 alt="Original"
                 className="w-full h-full object-cover"
               />
@@ -32,7 +33,8 @@ const ResultPage: React.FC = () => {
             <h2 className="font-semibold text-center">Transformed</h2>
             <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg max-w-sm mx-auto">
               <img
-                src={processedImage || '/images/results/processed.jpg'}
+                // src={processedImage || '/images/results/processed.jpg'}
+                 src="/src/images/samples/face_2.png"
                 alt="Transformed"
                 className="w-full h-full object-cover"
               />
