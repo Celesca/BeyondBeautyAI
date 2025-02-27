@@ -30,19 +30,7 @@ const beautyCategories: Category[] = [
         id: 'korean', 
         title: 'Korean Style', 
         description: 'K-beauty inspired look',
-        image: '/images/styles/korean.jpg' 
-      },
-      { 
-        id: 'glamour', 
-        title: 'Glamour', 
-        description: 'Bold and dramatic transformation',
-        image: '/images/styles/glamour.jpg' 
-      },
-      { 
-        id: 'minimal', 
-        title: 'Minimal', 
-        description: 'Subtle enhancement',
-        image: '/images/styles/minimal.jpg' 
+        image: '/src/images/overall/korean.jpg' 
       },
     ]
   },
@@ -54,13 +42,13 @@ const beautyCategories: Category[] = [
         id: 'nose-1', 
         title: 'Natural Slim', 
         description: 'Subtle nose refinement',
-        image: '/images/nose/natural-slim.jpg' 
+        image: '/src/images/noses/natural_slim.jpg' 
       },
       { 
         id: 'nose-2', 
         title: 'Button Nose', 
         description: 'Cute button-style nose',
-        image: '/images/nose/button.jpg' 
+        image: '/src/images/noses/button_nose.jpg' 
       },
       // Add more nose options...
     ]
@@ -73,13 +61,13 @@ const beautyCategories: Category[] = [
         id: 'eyes-1', 
         title: 'Smokey Eyes', 
         description: 'Bold and sultry look',
-        image: '/images/eyes/smokey.jpg' 
+        image: '/src/images/eyes/smokey.jpg' 
       },
       { 
         id: 'eyes-2', 
         title: 'Natural Eyes', 
         description: 'Enhance your natural eye shape',
-        image: '/images/eyes/natural.jpg' 
+        image: '/src/images/eyes/natural.jpg' 
       },
       // Add more eye options...
     ]
@@ -173,11 +161,12 @@ const handleSubmit = async () => {
 
             {/* Preview of captured photo */}
             {photoData && (
-              <div className="mb-6">
+              <div className="mb-6 flex justify-center">
                 <img 
-                  src={photoData} 
+                  // src={photoData} 
+                  src="/src/images/samples/face.png"
                   alt="Captured" 
-                  className="w-full max-h-64 object-cover rounded-lg shadow-md"
+                  className="max-h-64 object-cover rounded-lg shadow-md"
                 />
               </div>
             )}
