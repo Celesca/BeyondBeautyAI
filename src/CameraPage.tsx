@@ -32,6 +32,7 @@ const CamerVerticalPage: React.FC = () => {
   };
 
   const takePhoto = () => {
+    confirmPhoto();
     if (!videoRef.current) return;
   
     const video = videoRef.current;
