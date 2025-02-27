@@ -2,85 +2,103 @@ import React, { useRef, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FaCamera } from "react-icons/fa6";
 import Navbar from "./components/Navbar";
+import { FaceDetection } from "@mediapipe/face_detection";
+import { Camera } from "@mediapipe/camera_utils";
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
-const CamerVerticalPage: React.FC = () => {
+const CameraVerticalPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [photoData, setPhotoData] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const getVideo = () => {
-    const isDesktopOrTablet = window.innerWidth >= 768;
-    
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          facingMode: "environment",
-          aspectRatio: isDesktopOrTablet ? 16/9 : 3/4,
-          width: { ideal: isDesktopOrTablet ? 1920 : 1080 },
-        },
-      })
-      .then((stream) => {
-        const video = videoRef.current;
-        if (video) {
-          video.srcObject = stream;
-          video.play();
+  useEffect(() => {
+    const faceDetection = new FaceDetection({
+      locateFile: (file) => `/node_modules/@mediapipe/face_detection/${file}`, 
+    });
+
+    faceDetection.setOptions({
+      model: "short",
+      minDetectionConfidence: 0.5,
+      selfieMode: true,
+    });
+
+    const onResults = (results: any) => {
+      if (!canvasRef.current || !videoRef.current) return;
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      canvas.width = videoRef.current.clientWidth;
+      canvas.height = videoRef.current.clientHeight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+      if (results.detections) {
+        for (const detection of results.detections) {
+          drawConnectors(ctx, detection.landmarks, FaceDetection.FACE_POSE_CONNECTIONS, {
+            color: "#FF3030",
+            lineWidth: 2,
+          });
+          drawLandmarks(ctx, detection.landmarks, {
+            color: "#FFFFFF",
+            lineWidth: 1,
+            radius: 2,
+          });
         }
-      })
-      .catch((err) => {
-        console.error("Error accessing the camera: ", err);
+      }
+    };
+
+    faceDetection.onResults(onResults);
+
+    let camera: Camera | null = null;
+    if (videoRef.current) {
+      camera = new Camera(videoRef.current, {
+        onFrame: async () => {
+          await faceDetection.send({ image: videoRef.current! });
+        },
+        width: 1280,
+        height: 720,
       });
-  };
+      camera.start();
+    }
+
+    return () => {
+      if (camera) camera.stop();
+    };
+  }, []);
 
   const takePhoto = () => {
     if (!videoRef.current) return;
-  
-    const video = videoRef.current;
-    const canvas = document.createElement('canvas');
-    
-    // Get the actual video dimensions from the DOM element
-    const videoElement = video.getBoundingClientRect();
-    canvas.width = videoElement.width;
-    canvas.height = videoElement.height;
-  
-    const ctx = canvas.getContext('2d');
+
+    const photoCanvas = document.createElement("canvas");
+    const ctx = photoCanvas.getContext("2d");
+
     if (ctx) {
-      // Set white background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw video frame maintaining aspect ratio
-      const aspectRatio = video.videoWidth / video.videoHeight;
-      let drawWidth = canvas.width;
-      let drawHeight = canvas.width / aspectRatio;
-  
-      if (drawHeight > canvas.height) {
-        drawHeight = canvas.height;
-        drawWidth = canvas.height * aspectRatio;
-      }
-  
-      const x = (canvas.width - drawWidth) / 2;
-      const y = (canvas.height - drawHeight) / 2;
-  
-      ctx.drawImage(video, x, y, drawWidth, drawHeight);
-      const data = canvas.toDataURL('image/jpeg', 1.0); // Added quality parameter
+      photoCanvas.width = videoRef.current.videoWidth;
+      photoCanvas.height = videoRef.current.videoHeight;
+
+      ctx.drawImage(videoRef.current, 0, 0, photoCanvas.width, photoCanvas.height);
+
+      const data = photoCanvas.toDataURL("image/jpeg", 1.0);
       setPhotoData(data);
       setShowModal(true);
     }
   };
 
   const confirmPhoto = () => {
-    // Save photo data to localStorage
-    localStorage.setItem('capturedPhoto', photoData!);
-    
+    localStorage.setItem("capturedPhoto", photoData!);
     Swal.fire({
-      title: 'Photo Saved!',
-      text: 'Now let\'s choose your beauty style.',
-      icon: 'success',
+      title: "Photo Saved!",
+      text: "Now let's choose your beauty style.",
+      icon: "success",
       timer: 2000,
       showConfirmButton: false,
       willClose: () => {
-        window.location.href = '/select';
-      }
+        window.location.href = "/select";
+      },
     });
   };
 
@@ -88,17 +106,6 @@ const CamerVerticalPage: React.FC = () => {
     setPhotoData(null);
     setShowModal(false);
   };
-
-  useEffect(() => {
-    getVideo();
-    return () => {
-      const video = videoRef.current;
-      if (video && video.srcObject) {
-        const tracks = (video.srcObject as MediaStream).getTracks();
-        tracks.forEach(track => track.stop());
-      }
-    };
-  }, []);
 
   return (
     <div className="h-screen flex flex-col">
@@ -112,6 +119,10 @@ const CamerVerticalPage: React.FC = () => {
             muted
             className="w-full h-full object-cover rounded-lg shadow-lg"
           />
+          <canvas
+            ref={canvasRef}
+            className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          />
           <button
             className="absolute bottom-4 right-4 bg-blue-500 hover:bg-blue-700 
                       text-white font-bold py-3 px-6 rounded-full shadow-lg 
@@ -122,28 +133,27 @@ const CamerVerticalPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Photo Preview Modal */}
         {showModal && photoData && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div className="bg-white rounded-lg max-w-2xl w-full">
-      <div className="p-4 bg-white">
-        <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg">
-          <img 
-            src={photoData} 
-            alt="Captured photo" 
-            className="w-full h-full object-contain bg-white"
-          />
-        </div>
-      </div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg max-w-2xl w-full">
+              <div className="p-4 bg-white">
+                <div className="relative aspect-[3/4] md:aspect-video overflow-hidden rounded-lg">
+                  <img
+                    src={photoData}
+                    alt="Captured photo"
+                    className="w-full h-full object-contain bg-white"
+                  />
+                </div>
+              </div>
               <div className="flex justify-end gap-2 p-4 border-t">
-                <button 
+                <button
                   className="px-6 py-2 border border-gray-500 hover:bg-gray-100 
                            text-gray-700 font-bold rounded-full transition-colors"
                   onClick={retakePhoto}
                 >
                   RETRY
                 </button>
-                <button 
+                <button
                   className="px-6 py-2 bg-blue-500 hover:bg-blue-700 
                            text-white font-bold rounded-full transition-colors"
                   onClick={confirmPhoto}
@@ -159,4 +169,4 @@ const CamerVerticalPage: React.FC = () => {
   );
 };
 
-export default CamerVerticalPage;
+export default CameraVerticalPage;

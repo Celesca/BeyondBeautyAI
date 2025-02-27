@@ -62,7 +62,7 @@ const ResultPage: React.FC = () => {
             Take New Photo
           </button>
           <button
-            onClick={() => window.location.href = '/clicnic'}
+            onClick={() => window.location.href = '/clinic'}
             className="flex-1 py-3 px-6 rounded-lg bg-blue-500 hover:bg-blue-600 
                      text-white font-semibold transition-colors"
           >

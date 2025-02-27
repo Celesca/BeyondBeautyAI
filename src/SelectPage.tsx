@@ -24,25 +24,25 @@ const beautyCategories: Category[] = [
         id: 'natural', 
         title: 'Natural Beauty', 
         description: 'Enhance your natural features',
-        image: '/images/styles/natural.jpg' 
+        image: 'styles-face/natural-beauty-face.jpg'        
       },
       { 
         id: 'korean', 
         title: 'Korean Style', 
         description: 'K-beauty inspired look',
-        image: '/images/styles/korean.jpg' 
+        image: 'styles-face/korean-face.jpg' 
       },
       { 
         id: 'glamour', 
         title: 'Glamour', 
         description: 'Bold and dramatic transformation',
-        image: '/images/styles/glamour.jpg' 
+        image: 'styles-face/glamour-face.jpg' 
       },
       { 
         id: 'minimal', 
         title: 'Minimal', 
         description: 'Subtle enhancement',
-        image: '/images/styles/minimal.jpg' 
+        image: 'styles-face/minimal-face.jpg' 
       },
     ]
   },
@@ -54,13 +54,13 @@ const beautyCategories: Category[] = [
         id: 'nose-1', 
         title: 'Natural Slim', 
         description: 'Subtle nose refinement',
-        image: '/images/nose/natural-slim.jpg' 
+        image: 'styles-nose/natural-slim-nose.png' 
       },
       { 
         id: 'nose-2', 
         title: 'Button Nose', 
         description: 'Cute button-style nose',
-        image: '/images/nose/button.jpg' 
+        image: 'styles-nose/button-nose.png' 
       },
       // Add more nose options...
     ]
@@ -73,13 +73,13 @@ const beautyCategories: Category[] = [
         id: 'eyes-1', 
         title: 'Smokey Eyes', 
         description: 'Bold and sultry look',
-        image: '/images/eyes/smokey.jpg' 
+        image: 'styles-eyes/smoky-eye.jpg' 
       },
       { 
         id: 'eyes-2', 
         title: 'Natural Eyes', 
         description: 'Enhance your natural eye shape',
-        image: '/images/eyes/natural.jpg' 
+        image: 'styles-eyes/natural-eye.jpg' 
       },
       // Add more eye options...
     ]
@@ -124,30 +124,26 @@ const SelectPage: React.FC = () => {
 //   };
 
 const handleSubmit = async () => {
-    if (Object.keys(selectedOptions).length === 0 || !photoData) return;
-  
-    setIsLoading(true);
-    try {
-      // Save selected options to localStorage
-      localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-  
-      // For demo purposes, we'll use static images
-      // In production, this would be your API call
-      const processedImagePath = `/images/results/${selectedOptions['overall']}.jpg`;
-      localStorage.setItem('processedImage', processedImagePath);
-  
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-  
-      // Navigate to result page
-      window.location.href = '/result';
-    } catch (error) {
-      console.error('Error processing image:', error);
-      alert('Failed to process image. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  if (Object.keys(selectedOptions).length === 0 || !photoData) return;
+
+  setIsLoading(true);
+  try {
+    localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+
+    const styleType = selectedOptions['overall'] || 'natural';
+    const processedImagePath = `/images/results/${styleType}.jpg`; 
+    
+    localStorage.setItem('processedImage', processedImagePath);
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    window.location.href = '/result';
+  } catch (error) {
+    console.error('Error processing image:', error);
+    alert('Failed to process image. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
   
     // Helper function to convert Data URI to Blob
     const dataURItoBlob = (dataURI: string): Blob => {
