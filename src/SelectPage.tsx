@@ -24,7 +24,7 @@ const beautyCategories: Category[] = [
         id: 'natural', 
         title: 'Natural Beauty', 
         description: 'Enhance your natural features',
-        image: '/images/styles/natural.jpg' 
+        image: '/src/images/overall/natural.jpg'
       },
       { 
         id: 'korean', 
@@ -170,7 +170,7 @@ const handleSubmit = async () => {
             <h1 className="text-2xl font-bold text-center mb-6">
               Customize Your Look
             </h1>
-            
+
             {/* Preview of captured photo */}
             {photoData && (
               <div className="mb-6">
